@@ -28,50 +28,73 @@ async function run() {
     // Connect the client to the server	(optional starting in v4.7)
     await client.connect();
 
-    const serviceCollection= client.db('babydolls').collection('servicesdoll');
-    const servicesBarbieCollection= client.db('barbiedolls').collection('servicesBarbie');
- 
+    const serviceCollection = client.db('babydolls').collection('servicesdoll');
+    const servicesBarbieCollection = client.db('barbiedolls').collection('servicesBarbie');
+    const servicesGirlCollection = client.db('girldolls').collection('servicesGirl');
+
 
 
     // servicesdoll
-    app.get('/servicesdoll', async(req, res)=>{
-        const result= await serviceCollection.find().toArray();
-        res.send(result)
+    app.get('/servicesdoll', async (req, res) => {
+      const result = await serviceCollection.find().toArray();
+      res.send(result)
     })
 
-    app.get('/servicesdoll/:id', async(req, res)=>{
-        const id = req.params.id;
-        const query = {_id: new ObjectId(id)};
+    app.get('/servicesdoll/:id', async (req, res) => {
+      const id = req.params.id;
+      const query = { _id: new ObjectId(id) };
 
-        const options = {
-          
-          // Include only the `title` and `imdb` fields in the returned document
-          projection: {Picture: 1, category: 1, Rating: 1, details: 1, price: 1, },
-        };
+      const options = {
 
-        const result = await serviceCollection.findOne(query, options)
-        res.send(result)
+        // Include only the `title` and `imdb` fields in the returned document
+        projection: { Picture: 1, category: 1, Rating: 1, details: 1, price: 1, },
+      };
+
+      const result = await serviceCollection.findOne(query, options)
+      res.send(result)
     })
 
     // servicesBarbie
-    app.get('/servicesBarbie', async(req, res)=>{
-      const result= await servicesBarbieCollection.find().toArray();
+    app.get('/servicesBarbie', async (req, res) => {
+      const result = await servicesBarbieCollection.find().toArray();
       res.send(result)
-  })
+    })
 
-  app.get('/servicesBarbie/:id', async(req, res)=>{
+    app.get('/servicesBarbie/:id', async (req, res) => {
       const id = req.params.id;
-      const query = {_id: new ObjectId(id)};
+      const query = { _id: new ObjectId(id) };
 
       const options = {
-        
+
         // Include only the `title` and `imdb` fields in the returned document
-        projection: {Picture: 1, category: 1, Rating: 1, details: 1, price: 1, },
+        projection: { Picture: 1, category: 1, Rating: 1, details: 1, price: 1, },
       };
 
       const result = await servicesBarbieCollection.findOne(query, options)
       res.send(result)
-  })
+    })
+
+
+    // servicesGirl
+
+    app.get('/servicesGirl', async (req, res) => {
+      const result = await servicesGirlCollection.find().toArray();
+      res.send(result)
+    })
+
+    app.get('/servicesGirl/:id', async (req, res) => {
+      const id = req.params.id;
+      const query = { _id: new ObjectId(id) };
+
+      const options = {
+
+        // Include only the `title` and `imdb` fields in the returned document
+        projection: { Picture: 1, category: 1, Rating: 1, details: 1, price: 1, },
+      };
+
+      const result = await servicesGirlCollection.findOne(query, options)
+      res.send(result)
+    })
 
     // Send a ping to confirm a successful connection
     await client.db("admin").command({ ping: 1 });
@@ -85,7 +108,7 @@ run().catch(console.dir);
 
 
 app.get('/', (req, res) => {
-    res.send('Doll is running')
+  res.send('Doll is running')
 })
 
 app.listen(port, () => { console.log(`DOLLs is running on port: ${port}`) })
