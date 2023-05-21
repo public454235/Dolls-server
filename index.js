@@ -32,9 +32,13 @@ async function run() {
     const servicesBarbieCollection = client.db('barbiedolls').collection('servicesBarbie');
     const servicesGirlCollection = client.db('girldolls').collection('servicesGirl');
 
+    const bookingCollection = client.db('dollUser').collection('bookings')
+
 
 
     // servicesdoll
+
+
     app.get('/servicesdoll', async (req, res) => {
       const result = await serviceCollection.find().toArray();
       res.send(result)
@@ -51,6 +55,33 @@ async function run() {
       };
 
       const result = await serviceCollection.findOne(query, options)
+      res.send(result)
+    })
+
+    app.post('/bookings', async (req, res) => {
+      const booking = req.body;
+      console.log(booking, 'user')
+      const result = await bookingCollection.insertOne(booking)
+      res.send(result)
+
+    })
+
+    app.get('/bookings', async (req, res) => {
+      // const booking = req.body
+      let query = {}
+      if (req.query?.email) {
+        query = { email: req.query.email }
+      }
+      const cursor = bookingCollection.find(query)
+      const result = await cursor.toArray()
+      res.send(result)
+    })
+
+
+    app.get('/bookings/:id', async (req, res) => {
+      const id = req.params.id;
+      const query = { _id: new ObjectId(id) }
+      const result = await bookingCollection.findOne(query)
       res.send(result)
     })
 
@@ -91,6 +122,8 @@ async function run() {
         // Include only the `title` and `imdb` fields in the returned document
         projection: { Picture: 1, category: 1, Rating: 1, details: 1, price: 1, },
       };
+
+
 
       const result = await servicesGirlCollection.findOne(query, options)
       res.send(result)
