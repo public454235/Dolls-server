@@ -127,9 +127,37 @@ async function run() {
         projection: { Picture: 1, category: 1, Rating: 1, details: 1, price: 1, },
       };
 
-
-
       const result = await servicesGirlCollection.findOne(query, options)
+      res.send(result)
+    })
+    app.put('/bookings/:id', async (req, res) => {
+      const id = req.params.id;
+      const updateBookings = req.body;
+      const rest = { _id: new ObjectId(id) }
+      const options = { upsert: true }
+      const updateBooking = {
+        // console.log(name, seller_name, email, category, Price, Rating, details, quantity, photo)
+        $set: {
+          name: updateBookings.name,
+          seller_name: updateBookings.seller_name,
+          email: updateBookings.email,
+          category: updateBookings.category,
+          Price: updateBookings.Price,
+          details: updateBookings.details,
+          photo: updateBookings.photo,
+
+        }
+      }
+      const result = await bookingCollection.updateOne(rest, updateBooking, options)
+      res.send(result)
+    })
+
+    // Delete 
+    app.delete("/bookings/:id", async (req, res) => {
+      const id = req.params.id;
+      console.log(id)
+      const query = { _id: new ObjectId(id) }
+      const result = await bookingCollection.deleteOne(query)
       res.send(result)
     })
 
