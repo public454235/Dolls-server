@@ -72,7 +72,7 @@ async function run() {
       if (req.query?.email) {
         query = { email: req.query.email }
       }
-      const cursor = bookingCollection.find(query)
+      const cursor = bookingCollection.find(query).limit(2)
       const result = await cursor.toArray()
       res.send(result)
     })
