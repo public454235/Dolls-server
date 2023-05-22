@@ -67,7 +67,6 @@ async function run() {
     })
 
     app.get('/bookings', async (req, res) => {
-      // const booking = req.body
       let query = {}
       if (req.query?.email) {
         query = { email: req.query.email }
